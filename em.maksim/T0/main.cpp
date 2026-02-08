@@ -2,5 +2,5 @@
 
 int main()
 {
-  std::out << "em.maksim" << "\n";
+  std::cout << "em.maksim" << "\n";
 }
