@@ -57,6 +57,16 @@ std::istream& haliullin::operator>>(std::istream& in, DelimiterIO&& dest)
   return in;
 }
 
+std::istream& haliullin::operator>>(std::istream& in, UllLitIO&& dest)
+{
+
+}
+
+std::ostream& haliullin::operator<<(std::ostream& out, const UllLitIO& dest)
+{
+
+}
+
 std::istream& haliullin::operator>>(std::istream& in, RatLspIO&& dest)
 {
   std::istream::sentry sentry(in);
@@ -64,11 +74,25 @@ std::istream& haliullin::operator>>(std::istream& in, RatLspIO&& dest)
   {
     return in;
   }
-  in >> DelimiterIO{ '(' } >> DelimiterIO{ 'N' } >> dest.ref_.first  >> DelimiterIO{ ':' }
-  >> DelimiterIO{ 'D' } >> dest.ref_.second >> DelimiterIO{ ':' } >> DelimiterIO{ ')' };
+
+  long long num = 0;
+  unsigned long long den = 0;
+  in >> DelimiterIO{ '(' } >> DelimiterIO{ 'N' } >> num
+   >> DelimiterIO{ ':' } >> DelimiterIO{ 'D' } >> den
+  >> DelimiterIO{ ':' } >> DelimiterIO{ ')' };
+
+  if (in && den != 0)
+  {
+    dest.ref_ = std::make_pair(num, den);
+  }
+  else
+  {
+    in.setstate(std::ios_base::failbit);
+  }
+  return in;
 }
 
-std::ostream& haliullin::operator>>(std::ostream& out, const RatLspIO& dest)
+std::ostream& haliullin::operator<<(std::ostream& out, const RatLspIO& dest)
 {
   std::ostream::sentry sentry(out);
   if (!sentry)
