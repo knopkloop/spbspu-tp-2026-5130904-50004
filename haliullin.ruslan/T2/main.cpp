@@ -1,5 +1,5 @@
+#include "DataStruct.hpp"
 #include "IOguard.hpp"
-
 #include <iostream>
 #include <sstream>
 #include <iterator>
