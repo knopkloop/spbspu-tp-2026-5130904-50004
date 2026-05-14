@@ -19,7 +19,7 @@ namespace haliullin
   };
 }
 
-haliullin::IOguard::IOguard(std::basic_ios< char >& s):
+inline haliullin::IOguard::IOguard(std::basic_ios< char >& s):
   s_(s),
   width_(s.width()),
   fill_(s.fill()),
@@ -27,7 +27,7 @@ haliullin::IOguard::IOguard(std::basic_ios< char >& s):
   fmt_(s.flags())
 {}
 
-haliullin::IOguard::~IOguard()
+inline haliullin::IOguard::~IOguard()
 {
   s_.width(width_);
   s_.fill(fill_);
