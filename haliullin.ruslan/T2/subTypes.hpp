@@ -41,6 +41,19 @@ namespace haliullin
     std::string expected_;
   };
   std::istream& operator>>(std::istream& in, LabelIO&& dest);
+
+  class IOguard
+  {
+  public:
+    explicit IOguard(std::basic_ios< char >& s);
+    ~IOguard();
+  private:
+    std::basic_ios< char >& s_;
+    std::streamsize width_;
+    std::streamsize precision_;
+    std::basic_ios< char >::fmtflags fmt_;
+    char fill_;
+  };
 }
 
 #endif
