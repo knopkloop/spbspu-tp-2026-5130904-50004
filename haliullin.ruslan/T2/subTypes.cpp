@@ -69,7 +69,7 @@ std::istream& haliullin::operator>>(std::istream& in, RatLspIO&& dest)
   }
   else
   {
-    in.setstate(std::ios::failbit);
+    in.setstate(std::ios_base::failbit);
   }
   return in;
 }

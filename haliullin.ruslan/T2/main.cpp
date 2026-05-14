@@ -11,6 +11,7 @@ int main()
   using T = haliullin::DataStruct;
   std::vector< T > data;
   using iit_t = std::istream_iterator< T >;
+
   while (!std::cin.eof())
   {
     std::copy(iit_t {std::cin}, iit_t {}, std::back_inserter(data));
