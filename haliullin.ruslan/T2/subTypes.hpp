@@ -22,8 +22,6 @@ namespace haliullin
   };
   std::istream& operator>>(std::istream& in, UllLitIO&& dest);
   std::ostream& operator<<(std::ostream& out, const UllLitIO& dest);
-  bool operator<(const UllLitIO& lhs, const UllLitIO& rhs);
-  bool operator==(const UllLitIO& lhs, const UllLitIO& rhs);
 
   struct RatLspIO
   {
@@ -31,8 +29,6 @@ namespace haliullin
   };
   std::istream& operator>>(std::istream& in, RatLspIO&& dest);
   std::ostream& operator<<(std::ostream& out, const RatLspIO& dest);
-  bool operator<(const RatLspIO& lhs, const RatLspIO& rhs);
-  bool operator==(const RatLspIO& lhs, const RatLspIO& rhs);
 
   struct StringIO
   {
