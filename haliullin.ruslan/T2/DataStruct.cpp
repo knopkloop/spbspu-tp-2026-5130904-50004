@@ -64,7 +64,7 @@ bool haliullin::operator<(const DataStruct& lhs, const DataStruct& rhs)
 std::istream& haliullin::getValueByKey(std::istream& in, const std::string& key,
                                        int& mask, DataStruct& ds)
 {
-  Field field = static_cast<Field>(0);
+  Field field = static_cast< Field >(0);
   if (key == "key1")
   {
     field = KEY1;
@@ -93,17 +93,17 @@ std::istream& haliullin::getValueByKey(std::istream& in, const std::string& key,
   {
     case KEY1:
     {
-      in >> UllLitIO{ds.key1};
+      in >> UllLitIO{ ds.key1 };
       break;
     }
     case KEY2:
     {
-      in >> RatLspIO{ds.key2};
+      in >> RatLspIO{ ds.key2 };
       break;
     }
     case KEY3:
     {
-      in >> StringIO{ds.key3};
+      in >> StringIO{ ds.key3 };
       break;
     }
     default:
