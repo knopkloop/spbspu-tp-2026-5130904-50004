@@ -49,6 +49,16 @@ std::ostream& haliullin::operator<<(std::ostream& out, const UllLitIO& dest)
   return out;
 }
 
+bool haliullin::operator<(const UllLitIO& lhs, const UllLitIO& rhs)
+{
+  return lhs.ref_ < rhs.ref_;
+}
+
+bool haliullin::operator==(const UllLitIO& lhs, const UllLitIO& rhs)
+{
+  return lhs.ref_ == rhs.ref_;
+}
+
 std::istream& haliullin::operator>>(std::istream& in, RatLspIO&& dest)
 {
   std::istream::sentry sentry(in);
@@ -59,9 +69,9 @@ std::istream& haliullin::operator>>(std::istream& in, RatLspIO&& dest)
   char last = 0;
 
   in >> DelimiterIO{ '(', last }
-      >> DelimiterIO{ ':', last } >> LabelIO{ "N" } >> num
-      >> DelimiterIO{ ':', last } >> LabelIO{ "D" } >> den
-      >> DelimiterIO{ ':', last } >> DelimiterIO{ ')', last };
+    >> DelimiterIO{ ':', last } >> LabelIO{ "N" } >> num
+    >> DelimiterIO{ ':', last } >> LabelIO{ "D" } >> den
+    >> DelimiterIO{ ':', last } >> DelimiterIO{ ')', last };
 
   if (in && den != 0)
   {
@@ -85,6 +95,16 @@ std::ostream& haliullin::operator<<(std::ostream& out, const RatLspIO& dest)
   return out;
 }
 
+bool haliullin::operator<(const RatLspIO& lhs, const RatLspIO& rhs)
+{
+  return lhs.ref_ < rhs.ref_;
+}
+
+bool haliullin::operator==(const RatLspIO& lhs, const RatLspIO& rhs)
+{
+  return lhs.ref_ == rhs.ref_;
+}
+
 std::istream& haliullin::operator>>(std::istream& in, StringIO&& dest)
 {
   std::istream::sentry sentry(in);
@@ -92,8 +112,8 @@ std::istream& haliullin::operator>>(std::istream& in, StringIO&& dest)
   {
     return in;
   }
-  char last = 0;
-  return std::getline(in >> DelimiterIO{ '"', last }, dest.ref_ , '"');
+  std::getline(in, dest.ref_, '"');
+  return in;
 }
 
 std::istream& haliullin::operator>>(std::istream& in, LabelIO&& dest)
