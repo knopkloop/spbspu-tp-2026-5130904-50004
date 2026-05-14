@@ -1,9 +1,11 @@
-#ifndef SUBTYPES_CPP
-#define SUPTYPES_CPP
+#ifndef SUBTYPES_HPP
+#define SUBTYPES_HPP
 
 #include <ios>
 #include <sstream>
 #include <string>
+#include <cctype>
+#include <utility>
 
 namespace haliullin
 {
@@ -11,6 +13,7 @@ namespace haliullin
   struct DelimiterIO
   {
     char expected_;
+    char &last_;
   };
   std::istream& operator>>(std::istream& in, DelimiterIO&& dest);
 
@@ -48,9 +51,8 @@ std::istream& haliullin::operator>>(std::istream& in, DelimiterIO&& dest)
   {
     return in;
   }
-  char c = '0';
-  in >> c;
-  if (in && (c != dest.expected_))
+  in >> dest.last_;
+  if (in && (std::tolower(dest.last_) != std::tolower(dest.expected_)))
   {
     in.setstate(std::ios_base::failbit);
   }
@@ -59,27 +61,51 @@ std::istream& haliullin::operator>>(std::istream& in, DelimiterIO&& dest)
 
 std::istream& haliullin::operator>>(std::istream& in, UllLitIO&& dest)
 {
-
-}
-
-std::ostream& haliullin::operator<<(std::ostream& out, const UllLitIO& dest)
-{
-
-}
-
-std::istream& haliullin::operator>>(std::istream& in, RatLspIO&& dest)
-{
   std::istream::sentry sentry(in);
   if (!sentry)
   {
     return in;
   }
+  unsigned long long value = 0;
+  char c1 = 0, c2 = 0, c3 = 0;
+  in >> value >> DelimiterIO{'U', c1} >> DelimiterIO{'L', c2} >> DelimiterIO{'L', c3};
+  std::string lit = std::string("") + c1 + c2 + c3;
+  if (in && (lit != "ull" && lit != "ULL"))
+  {
+    in.setstate(std::ios_base::failbit);
+  }
+  if (in)
+  {
+    dest.ref_ = value;
+  }
+
+  return in;
+}
+
+std::ostream& haliullin::operator<<(std::ostream& out, const UllLitIO& dest)
+{
+  std::ostream::sentry sentry(out);
+  if (!sentry)
+  {
+    return out;
+  }
+  out << dest.ref_ << "ull";
+  return out;
+}
+
+std::istream& haliullin::operator>>(std::istream& in, RatLspIO&& dest)
+{
+  std::istream::sentry sentry(in);
+  if (!sentry) return in;
 
   long long num = 0;
   unsigned long long den = 0;
-  in >> DelimiterIO{ '(' } >> DelimiterIO{ 'N' } >> num
-   >> DelimiterIO{ ':' } >> DelimiterIO{ 'D' } >> den
-  >> DelimiterIO{ ':' } >> DelimiterIO{ ')' };
+  char last = 0;
+
+  in >> DelimiterIO{ '(', last }
+      >> DelimiterIO{ ':', last } >> LabelIO{ "N" } >> num
+      >> DelimiterIO{ ':', last } >> LabelIO{ "D" } >> den
+      >> DelimiterIO{ ':', last } >> DelimiterIO{ ')', last };
 
   if (in && den != 0)
   {
@@ -87,7 +113,7 @@ std::istream& haliullin::operator>>(std::istream& in, RatLspIO&& dest)
   }
   else
   {
-    in.setstate(std::ios_base::failbit);
+    in.setstate(std::ios::failbit);
   }
   return in;
 }
@@ -100,6 +126,7 @@ std::ostream& haliullin::operator<<(std::ostream& out, const RatLspIO& dest)
     return out;
   }
   out << "(:N " << dest.ref_.first << ":D " << dest.ref_.second << ":)";
+  return out;
 }
 
 std::istream& haliullin::operator>>(std::istream& in, StringIO&& dest)
@@ -109,7 +136,8 @@ std::istream& haliullin::operator>>(std::istream& in, StringIO&& dest)
   {
     return in;
   }
-  return std::getline(in >> DelimiterIO{ '"' }, dest.ref_ , '"');
+  char last = 0;
+  return std::getline(in >> DelimiterIO{ '"', last }, dest.ref_ , '"');
 }
 
 std::istream& haliullin::operator>>(std::istream& in, LabelIO&& dest)
