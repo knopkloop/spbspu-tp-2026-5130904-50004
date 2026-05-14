@@ -38,14 +38,14 @@ std::istream& haliullin::operator>>(std::istream& in, UllLitIO&& dest)
   return in;
 }
 
-std::ostream& haliullin::operator<<(std::ostream& out, const UllLitIO& dest)
+std::ostream& haliullin::operator<<(std::ostream& out, const UllLitIO& src)
 {
   std::ostream::sentry sentry(out);
   if (!sentry)
   {
     return out;
   }
-  out << dest.ref_ << "ull";
+  out << src.ref_ << "ull";
   return out;
 }
 
@@ -74,14 +74,14 @@ std::istream& haliullin::operator>>(std::istream& in, RatLspIO&& dest)
   return in;
 }
 
-std::ostream& haliullin::operator<<(std::ostream& out, const RatLspIO& dest)
+std::ostream& haliullin::operator<<(std::ostream& out, const RatLspIO& src)
 {
   std::ostream::sentry sentry(out);
   if (!sentry)
   {
     return out;
   }
-  out << "(:N " << dest.ref_.first << ":D " << dest.ref_.second << ":)";
+  out << "(:N " << src.ref_.first << ":D " << src.ref_.second << ":)";
   return out;
 }
 

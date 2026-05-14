@@ -21,14 +21,14 @@ namespace haliullin
     unsigned long long &ref_;
   };
   std::istream& operator>>(std::istream& in, UllLitIO&& dest);
-  std::ostream& operator<<(std::ostream& out, const UllLitIO& dest);
+  std::ostream& operator<<(std::ostream& out, const UllLitIO& src);
 
   struct RatLspIO
   {
     std::pair< long long, unsigned long long >& ref_;
   };
   std::istream& operator>>(std::istream& in, RatLspIO&& dest);
-  std::ostream& operator<<(std::ostream& out, const RatLspIO& dest);
+  std::ostream& operator<<(std::ostream& out, const RatLspIO& src);
 
   struct StringIO
   {

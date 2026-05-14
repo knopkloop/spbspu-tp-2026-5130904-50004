@@ -6,6 +6,14 @@
 
 namespace haliullin
 {
+  enum Field
+  {
+    KEY1 = 1,
+    KEY2 = 2,
+    KEY3 = 4,
+    ALL  = KEY1 | KEY2 | KEY3
+  };
+
   struct DataStruct
   {
     unsigned long long key1;
@@ -24,7 +32,6 @@ namespace haliullin
   bool key2_equal(const std::pair<long long, unsigned long long>& a,
                   const std::pair<long long, unsigned long long>& b);
   bool key3_less(const std::string& a, const std::string& b);
-
 }
 
 #endif

@@ -1,7 +1,117 @@
 #include "DataStruct.hpp"
 #include "subTypes.hpp"
+#include <string>
 
-std::istream& haliullin::operator>>(std::istream& in, DataStruct& dest);
+std::istream& haliullin::operator>>(std::istream& in, DataStruct& dest)
+{
+  std::istream::sentry sentry(in);
+  if (!sentry)
+  {
+    return in;
+  }
+
+  DataStruct tmp;
+  char dummy = 0;
+  int mask = 0;
+
+  in >> DelimiterIO{ '(', dummy };
+  if (!in)
+  {
+    return in;
+  }
+
+  while (in)
+  {
+    if (in.peek() == ')')
+    {
+      in >> DelimiterIO{ ')', dummy };
+      break;
+    }
+
+    if (!(in >> DelimiterIO{ ':', dummy }))
+    {
+      in.setstate(std::ios::failbit);
+      break;
+    }
+
+    std::string label;
+    if (!(in >> label))
+    {
+      in.setstate(std::ios::failbit);
+      break;
+    }
+
+    if (!(in >> DelimiterIO{ ':', dummy }))
+    {
+      in.setstate(std::ios::failbit);
+      break;
+    }
+
+    Field field = static_cast< Field >(0);
+    if (label == "key1")
+    {
+      field = KEY1;
+    }
+    else if (label == "key2")
+    {
+      field = KEY2;
+    }
+    else if (label == "key3")
+    {
+      field = KEY3;
+    }
+    else
+    {
+      in.setstate(std::ios::failbit);
+      break;
+    }
+
+    if (mask & field)
+    {
+      in.setstate(std::ios::failbit);
+      break;
+    }
+
+    switch (field)
+    {
+      case KEY1:
+      {
+        in >> UllLitIO{tmp.key1};
+        break;
+      }
+      case KEY2:
+      {
+        in >> RatLspIO{tmp.key2};
+        break;
+      }
+      case KEY3:
+      {
+        in >> StringIO{tmp.key3};
+        break;
+      }
+      default:
+      {
+        in.setstate(std::ios::failbit);
+        break;
+      }
+    }
+    if (!in)
+    {
+      break;
+    }
+    mask |= field;
+  }
+
+  if (in && mask == ALL)
+  {
+    dest = tmp;
+  }
+  else
+  {
+    in.setstate(std::ios::failbit);
+  }
+  return in;
+}
 
 std::ostream& haliullin::operator<<(std::ostream& out, const DataStruct& src)
 {
@@ -42,13 +152,13 @@ bool haliullin::key1_equal(unsigned long long a, unsigned long long b)
 }
 
 bool haliullin::key2_less(const std::pair<long long, unsigned long long>& a,
-                const std::pair<long long, unsigned long long>& b)
+                          const std::pair<long long, unsigned long long>& b)
 {
   return (long double)a.first / a.second < (long double)b.first / b.second;
 }
 
 bool haliullin::key2_equal(const std::pair<long long, unsigned long long>& a,
-                const std::pair<long long, unsigned long long>& b)
+                           const std::pair<long long, unsigned long long>& b)
 {
   return (long double)a.first / a.second == (long double)b.first / b.second;
 }
