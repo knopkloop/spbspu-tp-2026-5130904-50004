@@ -1,6 +1,7 @@
 #include "DataStruct.hpp"
 #include "subTypes.hpp"
 #include <string>
+#include <cstddef>
 
 std::istream& haliullin::operator>>(std::istream& in, DataStruct& dest)
 {
@@ -14,40 +15,20 @@ std::istream& haliullin::operator>>(std::istream& in, DataStruct& dest)
   char dummy = 0;
   int mask = 0;
 
-  in >> DelimiterIO{ '(', dummy };
+  in >> DelimiterIO{'(', dummy};
   if (!in)
   {
     return in;
   }
 
-  while (in)
+  for (size_t i = 0; i < 3; ++i)
   {
-    if (in.peek() == ')')
-    {
-      in >> DelimiterIO{ ')', dummy };
-      break;
-    }
-
-    if (!(in >> DelimiterIO{ ':', dummy }))
-    {
-      in.setstate(std::ios::failbit);
-      break;
-    }
-
+    in >> DelimiterIO{':', dummy};
     std::string label;
-    if (!(in >> label))
-    {
-      in.setstate(std::ios::failbit);
-      break;
-    }
+    in >> label;
+    in >> DelimiterIO{':', dummy};
 
-    if (!(in >> DelimiterIO{ ':', dummy }))
-    {
-      in.setstate(std::ios::failbit);
-      break;
-    }
-
-    Field field = static_cast< Field >(0);
+    Field field = static_cast<Field>(0);
     if (label == "key1")
     {
       field = KEY1;
@@ -101,6 +82,8 @@ std::istream& haliullin::operator>>(std::istream& in, DataStruct& dest)
     }
     mask |= field;
   }
+
+  in >> DelimiterIO{':', dummy} >> DelimiterIO{')', dummy};
 
   if (in && mask == ALL)
   {

@@ -25,7 +25,7 @@ std::istream& haliullin::operator>>(std::istream& in, UllLitIO&& dest)
   unsigned long long value = 0;
   char c1 = 0, c2 = 0, c3 = 0;
   in >> value >> DelimiterIO{'U', c1} >> DelimiterIO{'L', c2} >> DelimiterIO{'L', c3};
-  std::string lit = std::string("") + c1 + c2 + c3;
+  std::string lit{c1, c2, c3};
   if (in && (lit != "ull" && lit != "ULL"))
   {
     in.setstate(std::ios_base::failbit);
