@@ -1,7 +1,64 @@
 #include "DataStruct.hpp"
 #include "subTypes.hpp"
 #include <string>
-#include <cstddef>
+
+std::istream& haliullin::getValueByKey(std::istream& in, const std::string& key,
+                              int& mask, DataStruct& ds)
+{
+  Field field = static_cast<Field>(0);
+  if (key == "key1")
+  {
+    field = KEY1;
+  }
+  else if (key == "key2")
+  {
+    field = KEY2;
+  }
+  else if (key == "key3")
+  {
+    field = KEY3;
+  }
+  else
+  {
+    in.setstate(std::ios::failbit);
+    return in;
+  }
+
+  if (mask & field)
+  {
+    in.setstate(std::ios::failbit);
+    return in;
+  }
+
+  switch (field)
+  {
+    case KEY1:
+    {
+      in >> UllLitIO{ds.key1};
+      break;
+    }
+    case KEY2:
+    {
+      in >> RatLspIO{ds.key2};
+      break;
+    }
+    case KEY3:
+    {
+      in >> StringIO{ds.key3};
+      break;
+    }
+    default:
+    {
+      in.setstate(std::ios::failbit);
+      return in;
+    }
+  }
+  if (in)
+  {
+    mask |= field;
+  }
+  return in;
+}
 
 std::istream& haliullin::operator>>(std::istream& in, DataStruct& dest)
 {
@@ -14,76 +71,14 @@ std::istream& haliullin::operator>>(std::istream& in, DataStruct& dest)
   DataStruct tmp;
   char dummy = 0;
   int mask = 0;
+  std::string k1, k2, k3;
 
-  in >> DelimiterIO{'(', dummy};
-  if (!in)
-  {
-    return in;
-  }
-
-  for (size_t i = 0; i < 3; ++i)
-  {
-    in >> DelimiterIO{':', dummy};
-    std::string label;
-    in >> label;
-    in >> DelimiterIO{':', dummy};
-
-    Field field = static_cast<Field>(0);
-    if (label == "key1")
-    {
-      field = KEY1;
-    }
-    else if (label == "key2")
-    {
-      field = KEY2;
-    }
-    else if (label == "key3")
-    {
-      field = KEY3;
-    }
-    else
-    {
-      in.setstate(std::ios::failbit);
-      break;
-    }
-
-    if (mask & field)
-    {
-      in.setstate(std::ios::failbit);
-      break;
-    }
-
-    switch (field)
-    {
-      case KEY1:
-      {
-        in >> UllLitIO{tmp.key1};
-        break;
-      }
-      case KEY2:
-      {
-        in >> RatLspIO{tmp.key2};
-        break;
-      }
-      case KEY3:
-      {
-        in >> StringIO{tmp.key3};
-        break;
-      }
-      default:
-      {
-        in.setstate(std::ios::failbit);
-        break;
-      }
-    }
-    if (!in)
-    {
-      break;
-    }
-    mask |= field;
-  }
-
-  in >> DelimiterIO{':', dummy} >> DelimiterIO{')', dummy};
+  in >> DelimiterIO{'(', dummy}
+     >> DelimiterIO{':', dummy}
+     >> k1 >> KeyValueInp{k1, mask, tmp} >> DelimiterIO{':', dummy}
+     >> k2 >> KeyValueInp{k2, mask, tmp} >> DelimiterIO{':', dummy}
+     >> k3 >> KeyValueInp{k3, mask, tmp} >> DelimiterIO{':', dummy}
+     >> DelimiterIO{')', dummy};
 
   if (in && mask == ALL)
   {
@@ -94,6 +89,11 @@ std::istream& haliullin::operator>>(std::istream& in, DataStruct& dest)
     in.setstate(std::ios::failbit);
   }
   return in;
+}
+
+std::istream& haliullin::operator>>(std::istream& in, KeyValueInp inp)
+{
+  return getValueByKey(in, inp.key, inp.mask, inp.ds);
 }
 
 std::ostream& haliullin::operator<<(std::ostream& out, const DataStruct& src)

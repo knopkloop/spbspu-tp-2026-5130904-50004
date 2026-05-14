@@ -120,16 +120,16 @@ std::istream& haliullin::operator>>(std::istream& in, LabelIO&& dest)
 
 haliullin::IOguard::IOguard(std::basic_ios< char >& s):
   s_(s),
-  width_(s.width()),
   precision_(s.precision()),
+  width_(s.width()),
   fmt_(s.flags()),
   fill_(s.fill())
 {}
 
 haliullin::IOguard::~IOguard()
 {
-  s_.width(width_);
   s_.precision(precision_);
+  s_.width(width_);
   s_.flags(fmt_);
   s_.fill(fill_);
 }

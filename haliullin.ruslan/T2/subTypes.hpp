@@ -49,8 +49,8 @@ namespace haliullin
     ~IOguard();
   private:
     std::basic_ios< char >& s_;
-    std::streamsize width_;
     std::streamsize precision_;
+    std::streamsize width_;
     std::basic_ios< char >::fmtflags fmt_;
     char fill_;
   };
