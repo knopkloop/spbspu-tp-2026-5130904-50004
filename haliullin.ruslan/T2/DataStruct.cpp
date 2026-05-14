@@ -154,13 +154,13 @@ bool haliullin::key1_equal(unsigned long long a, unsigned long long b)
 bool haliullin::key2_less(const std::pair<long long, unsigned long long>& a,
                           const std::pair<long long, unsigned long long>& b)
 {
-  return (long double)a.first / a.second < (long double)b.first / b.second;
+  return static_cast< long double >(a.first) / a.second < static_cast< long double >(b.first) / b.second;
 }
 
 bool haliullin::key2_equal(const std::pair<long long, unsigned long long>& a,
                            const std::pair<long long, unsigned long long>& b)
 {
-  return (long double)a.first / a.second == (long double)b.first / b.second;
+  return static_cast< long double >(a.first) / a.second == static_cast< long double >(b.first) / b.second;
 }
 
 bool haliullin::key3_less(const std::string& a, const std::string& b)
