@@ -22,19 +22,21 @@ std::istream& haliullin::operator>>(std::istream& in, UllLitIO&& dest)
   {
     return in;
   }
+
   unsigned long long value = 0;
   char c1 = 0, c2 = 0, c3 = 0;
-  in >> value >> DelimiterIO{'U', c1} >> DelimiterIO{'L', c2} >> DelimiterIO{'L', c3};
-  std::string lit{c1, c2, c3};
-  if (in && (lit != "ull" && lit != "ULL"))
-  {
-    in.setstate(std::ios_base::failbit);
-  }
-  if (in)
+
+  in >> value >> DelimiterIO{ 'U', c1 } >> DelimiterIO{ 'L', c2 } >> DelimiterIO{ 'L', c3 };
+  std::string lit{ c1, c2, c3 };
+
+  if (in && (lit == "ull" || lit == "ULL"))
   {
     dest.ref_ = value;
   }
-
+  else
+  {
+    in.setstate(std::ios_base::failbit);
+  }
   return in;
 }
 
@@ -52,16 +54,19 @@ std::ostream& haliullin::operator<<(std::ostream& out, const UllLitIO& src)
 std::istream& haliullin::operator>>(std::istream& in, RatLspIO&& dest)
 {
   std::istream::sentry sentry(in);
-  if (!sentry) return in;
+  if (!sentry)
+  {
+    return in;
+  }
 
   long long num = 0;
   unsigned long long den = 0;
   char last = 0;
 
   in >> DelimiterIO{ '(', last }
-    >> DelimiterIO{ ':', last } >> LabelIO{ "N" } >> num
-    >> DelimiterIO{ ':', last } >> LabelIO{ "D" } >> den
-    >> DelimiterIO{ ':', last } >> DelimiterIO{ ')', last };
+     >> DelimiterIO{ ':', last } >> LabelIO{ "N" } >> num
+     >> DelimiterIO{ ':', last } >> LabelIO{ "D" } >> den
+     >> DelimiterIO{ ':', last } >> DelimiterIO{ ')', last };
 
   if (in && den != 0)
   {

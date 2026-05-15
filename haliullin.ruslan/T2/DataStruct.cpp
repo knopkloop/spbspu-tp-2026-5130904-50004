@@ -15,8 +15,7 @@ std::istream& haliullin::operator>>(std::istream& in, DataStruct& dest)
   int mask = 0;
   std::string k1, k2, k3;
 
-  in >> DelimiterIO{ '(', dummy }
-     >> DelimiterIO{ ':', dummy }
+  in >> DelimiterIO{ '(', dummy } >> DelimiterIO{ ':', dummy }
      >> k1 >> KeyValueInp{ k1, mask, tmp } >> DelimiterIO{ ':', dummy }
      >> k2 >> KeyValueInp{ k2, mask, tmp } >> DelimiterIO{ ':', dummy }
      >> k3 >> KeyValueInp{ k3, mask, tmp } >> DelimiterIO{ ':', dummy }
@@ -40,6 +39,7 @@ std::ostream& haliullin::operator<<(std::ostream& out, const DataStruct& src)
   {
     return out;
   }
+
   IOguard guard(out);
   unsigned long long key1_copy = src.key1;
   std::pair< long long, unsigned long long > key2_copy = src.key2;
@@ -47,6 +47,7 @@ std::ostream& haliullin::operator<<(std::ostream& out, const DataStruct& src)
   out << "(:key1 " << UllLitIO{ key1_copy }
       << ":key2 " << RatLspIO{ key2_copy }
       << ":key3 \"" << src.key3 << "\":)";
+
   return out;
 }
 
@@ -61,8 +62,12 @@ bool haliullin::operator<(const DataStruct& lhs, const DataStruct& rhs)
   return c1 || (c1_eq && c2) || (c1_eq && c2_eq && c3);
 }
 
-std::istream& haliullin::getValueByKey(std::istream& in, const std::string& key,
-                                       int& mask, DataStruct& ds)
+std::istream& haliullin::operator>>(std::istream& in, KeyValueInp inp)
+{
+  return getValueByKey(in, inp.key, inp.mask, inp.ds);
+}
+
+std::istream& haliullin::getValueByKey(std::istream& in, const std::string& key, int& mask, DataStruct& ds)
 {
   Field field = static_cast< Field >(0);
   if (key == "key1")
@@ -119,11 +124,6 @@ std::istream& haliullin::getValueByKey(std::istream& in, const std::string& key,
   return in;
 }
 
-std::istream& haliullin::operator>>(std::istream& in, KeyValueInp inp)
-{
-  return getValueByKey(in, inp.key, inp.mask, inp.ds);
-}
-
 bool haliullin::key1_less(unsigned long long a, unsigned long long b)
 {
   return a < b;
@@ -134,14 +134,12 @@ bool haliullin::key1_equal(unsigned long long a, unsigned long long b)
   return a == b;
 }
 
-bool haliullin::key2_less(const std::pair<long long, unsigned long long>& a,
-                          const std::pair<long long, unsigned long long>& b)
+bool haliullin::key2_less(const std::pair< long long, unsigned long long >& a, const std::pair< long long, unsigned long long >& b)
 {
   return static_cast< long double >(a.first) / a.second < static_cast< long double >(b.first) / b.second;
 }
 
-bool haliullin::key2_equal(const std::pair<long long, unsigned long long>& a,
-                           const std::pair<long long, unsigned long long>& b)
+bool haliullin::key2_equal(const std::pair< long long, unsigned long long >& a, const std::pair< long long, unsigned long long >& b)
 {
   return static_cast< long double >(a.first) / a.second == static_cast< long double >(b.first) / b.second;
 }
