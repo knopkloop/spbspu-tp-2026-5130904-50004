@@ -1,7 +1,6 @@
 #include "DataStruct.hpp"
 #include "subTypes.hpp"
 #include <string>
-#include <limits>
 
 std::istream& haliullin::operator>>(std::istream& in, DataStruct& dest)
 {
@@ -28,9 +27,7 @@ std::istream& haliullin::operator>>(std::istream& in, DataStruct& dest)
   }
   else
   {
-    in.clear();
-    in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
-    in >> dest;
+    in.setstate(std::ios_base::failbit);
   }
   return in;
 }
