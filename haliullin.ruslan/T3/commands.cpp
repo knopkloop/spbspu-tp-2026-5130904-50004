@@ -10,7 +10,7 @@
 #include <functional>
 #include <stdexcept>
 
-std::vector<haliullin::Polygon> haliullin::readPolygonsFromFile(const std::string& filename)
+haliullin::data_t haliullin::readPolygonsFromFile(const std::string& filename)
 {
   std::ifstream file(filename);
   if (!file.is_open())
@@ -45,3 +45,64 @@ std::vector<haliullin::Polygon> haliullin::readPolygonsFromFile(const std::strin
   readRecursive(file);
   return polygons;
 }
+
+void haliullin::area(std::istream& in, std::ostream& out, const data_t& polygons)
+{
+  std::string param;
+  if (!(in >> param))
+  {
+    out << "<INVALID COMMAND>\n";
+    in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    return;
+  }
+
+  out << std::fixed << std::setprecision(1);
+
+  if (param == "EVEN")
+  {
+    double sum = std::accumulate(polygons.begin(), polygons.end(), 0.0,
+      [](double s, const Polygon& p)
+      {
+        return s + (p.points_.size() % 2 == 0 ? getArea(p) : 0.0);
+      });
+    out << sum << "\n";
+  }
+  else if (param == "ODD")
+  {
+    double sum = std::accumulate(polygons.begin(), polygons.end(), 0.0,
+      [](double s, const Polygon& p)
+      {
+        return s + (p.points_.size() % 2 != 0 ? getArea(p) : 0.0);
+      });
+    out << sum << "\n";
+  }
+  else if (param == "MEAN")
+  {
+    if (polygons.empty())
+    {
+      out << "<INVALID COMMAND>\n";
+      in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+      return;
+    }
+    double sum = std::accumulate(polygons.begin(), polygons.end(), 0.0,
+      [](double s, const Polygon& p) { return s + getArea(p); });
+    out << sum / polygons.size() << "\n";
+  }
+  else
+  {
+    int n = std::atoi(param.c_str());
+    if (n <= 0)
+    {
+      out << "<INVALID COMMAND>\n";
+      in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+      return;
+    }
+    double sum = std::accumulate(polygons.begin(), polygons.end(), 0.0,
+      [n](double s, const Polygon& p)
+      {
+        return s + (static_cast< int >(p.points_.size()) == n ? getArea(p) : 0.0);
+      });
+    out << sum << "\n";
+  }
+}
+
