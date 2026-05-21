@@ -214,3 +214,18 @@ void haliullin::count(std::istream& in, std::ostream& out, const data_t& polygon
     out << cnt << "\n";
   }
 }
+
+void haliullin::intersections(std::istream& in, std::ostream& out, const data_t& polygons)
+{
+  Polygon target;
+  if (!(in >> target))
+  {
+    out << "<INVALID COMMAND>\n";
+    in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    return;
+  }
+
+  auto cnt = std::count_if(polygons.begin(), polygons.end(),
+    [&target](const Polygon& p) { return polygonsIntersect(target, p); });
+  out << cnt << "\n";
+}
