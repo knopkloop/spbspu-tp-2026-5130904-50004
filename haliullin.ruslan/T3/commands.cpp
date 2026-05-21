@@ -177,3 +177,40 @@ void haliullin::min(std::istream& in, std::ostream& out, const data_t& polygons)
     in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   }
 }
+
+void haliullin::count(std::istream& in, std::ostream& out, const data_t& polygons)
+{
+  std::string param;
+  if (!(in >> param))
+  {
+    out << "<INVALID COMMAND>\n";
+    in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    return;
+  }
+
+  if (param == "EVEN")
+  {
+    auto cnt = std::count_if(polygons.begin(), polygons.end(),
+      [](const Polygon& p) { return p.points_.size() % 2 == 0; });
+    out << cnt << "\n";
+  }
+  else if (param == "ODD")
+  {
+    auto cnt = std::count_if(polygons.begin(), polygons.end(),
+      [](const Polygon& p) { return p.points_.size() % 2 != 0; });
+    out << cnt << "\n";
+  }
+  else
+  {
+    int n = std::atoi(param.c_str());
+    if (n <= 0)
+    {
+      out << "<INVALID COMMAND>\n";
+      in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+      return;
+    }
+    auto cnt = std::count_if(polygons.begin(), polygons.end(),
+      [n](const Polygon& p) { return static_cast< int >(p.points_.size()) == n; });
+    out << cnt << "\n";
+  }
+}
