@@ -40,7 +40,7 @@ std::istream& haliullin::operator>>(std::istream& in, Polygon& dest)
   }
   size_t count = 0;
   in >> count;
-  if (!in)
+  if (!in || count < 3)
   {
     in.setstate(std::ios_base::failbit);
     return in;
@@ -91,7 +91,7 @@ double haliullin::getArea(const Polygon& poly)
     return 0.0;
   }
 
-  std::vector<double> triAreas(pts.size() - 2);
+  std::vector< double > triAreas(pts.size() - 2);
   const Point& p0 = pts[0];
 
   std::generate(triAreas.begin(), triAreas.end(),
@@ -156,7 +156,7 @@ bool haliullin::polygonsIntersect(const Polygon& a, const Polygon& b)
       const Point& p1 = ptsA[i];
       const Point& p2 = ptsA[(i + 1) % nA];
 
-      std::vector<size_t> indicesB(nB);
+      std::vector< size_t > indicesB(nB);
       std::generate(indicesB.begin(), indicesB.end(), [j = 0]() mutable { return j++; });
 
       return std::any_of(indicesB.begin(), indicesB.end(),

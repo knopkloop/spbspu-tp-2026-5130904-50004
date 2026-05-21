@@ -18,31 +18,26 @@ haliullin::data_t haliullin::readPolygonsFromFile(const std::string& filename)
     throw std::runtime_error("Cannot open file");
   }
 
-  std::vector<Polygon> polygons;
-  std::function< void(std::istream&) > readRecursive = [&](std::istream& is)
+  std::vector< Polygon > polygons;
+  std::function< void() > readRecursive = [&]()
   {
-    if (is.eof())
-    {
-      return;
-    }
     Polygon p;
-    if (is >> p)
+    if (file >> p)
     {
       polygons.push_back(p);
-      readRecursive(is);
+      readRecursive();
       return;
     }
-    if (is.eof())
+    if (file.eof())
     {
       return;
     }
-    is.clear();
-    std::string trash;
-    std::getline(is, trash);
-    readRecursive(is);
+    file.clear();
+    file.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    readRecursive();
   };
 
-  readRecursive(file);
+  readRecursive();
   return polygons;
 }
 
@@ -97,7 +92,7 @@ void haliullin::area(std::istream& in, std::ostream& out, const data_t& polygons
       return;
     }
     size_t n = std::stoull(param);
-    if (n == 0)
+    if (n < 3)
     {
       out << "<INVALID COMMAND>\n";
       in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
@@ -215,7 +210,7 @@ void haliullin::count(std::istream& in, std::ostream& out, const data_t& polygon
       return;
     }
     size_t n = std::stoull(param);
-    if (n == 0)
+    if (n < 3)
     {
       out << "<INVALID COMMAND>\n";
       in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
@@ -243,13 +238,19 @@ void haliullin::rightshapes(std::istream& in, std::ostream& out, const data_t& p
 void haliullin::intersections(std::istream& in, std::ostream& out, const data_t& polygons)
 {
   Polygon target;
-  if (!(in >> target))
+  if (!(in >> target) || target.points_.size() < 3)
   {
     out << "<INVALID COMMAND>\n";
     in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     return;
   }
-
+  std::string extra;
+  if (in >> extra)
+  {
+    out << "<INVALID COMMAND>\n";
+    in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    return;
+  }
   auto cnt = std::count_if(polygons.begin(), polygons.end(),
     [&target](const Polygon& p) { return polygonsIntersect(target, p); });
   out << cnt << "\n";
