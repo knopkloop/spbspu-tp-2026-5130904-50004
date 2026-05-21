@@ -22,6 +22,8 @@ namespace haliullin
   std::ostream& operator<<(std::ostream& out, const Polygon& src);
 
   double getArea(const Polygon& poly);
+  bool hasRightAngle(const Polygon& poly);
+  bool polygonsIntersect(const Polygon& a, const Polygon& b);
 
   using iit_t = std::istream_iterator<Point>;
   using oit_t = std::ostream_iterator<Point>;
