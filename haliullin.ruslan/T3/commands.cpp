@@ -90,8 +90,14 @@ void haliullin::area(std::istream& in, std::ostream& out, const data_t& polygons
   }
   else
   {
-    int n = std::atoi(param.c_str());
-    if (n <= 0)
+    if (!std::all_of(param.begin(), param.end(), ::isdigit))
+    {
+      out << "<INVALID COMMAND>\n";
+      in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+      return;
+    }
+    size_t n = std::stoull(param);
+    if (n == 0)
     {
       out << "<INVALID COMMAND>\n";
       in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
@@ -202,15 +208,21 @@ void haliullin::count(std::istream& in, std::ostream& out, const data_t& polygon
   }
   else
   {
-    int n = std::atoi(param.c_str());
-    if (n <= 0)
+    if (!std::all_of(param.begin(), param.end(), ::isdigit))
     {
       out << "<INVALID COMMAND>\n";
-      in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+      in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+      return;
+    }
+    size_t n = std::stoull(param);
+    if (n == 0)
+    {
+      out << "<INVALID COMMAND>\n";
+      in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
       return;
     }
     auto cnt = std::count_if(polygons.begin(), polygons.end(),
-      [n](const Polygon& p) { return static_cast< int >(p.points_.size()) == n; });
+      [n](const Polygon& p) { return static_cast<int>(p.points_.size()) == n; });
     out << cnt << "\n";
   }
 }

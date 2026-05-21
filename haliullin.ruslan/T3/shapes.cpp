@@ -43,6 +43,7 @@ std::istream& haliullin::operator>>(std::istream& in, Polygon& dest)
   if (!in)
   {
     in.setstate(std::ios_base::failbit);
+    return in;
   }
   std::vector< Point > temp;
   temp.reserve(count);
