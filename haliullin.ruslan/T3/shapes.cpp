@@ -167,3 +167,31 @@ bool haliullin::polygonsIntersect(const Polygon& a, const Polygon& b)
         });
     });
 }
+
+int haliullin::orientation(const Point& a, const Point& b, const Point& c)
+{
+  int val = (b.x_ - a.x_) * (c.y_ - a.y_) - (b.y_ - a.y_) * (c.x_ - a.x_);
+  if (val == 0) return 0;
+  return (val > 0) ? 1 : 2;
+}
+
+bool haliullin::onSegment(const Point& a, const Point& b, const Point& c)
+{
+  return (std::min(a.x_, b.x_) <= c.x_ && c.x_ <= std::max(a.x_, b.x_))
+      && (std::min(a.y_, b.y_) <= c.y_ && c.y_ <= std::max(a.y_, b.y_));
+}
+
+bool haliullin::segmentsIntersect(const Point& p1, const Point& p2, const Point& q1, const Point& q2)
+{
+  int o1 = orientation(p1, p2, q1);
+  int o2 = orientation(p1, p2, q2);
+  int o3 = orientation(q1, q2, p1);
+  int o4 = orientation(q1, q2, p2);
+
+  if (o1 != o2 && o3 != o4) return true;
+  if (o1 == 0 && onSegment(p1, p2, q1)) return true;
+  if (o2 == 0 && onSegment(p1, p2, q2)) return true;
+  if (o3 == 0 && onSegment(q1, q2, p1)) return true;
+  if (o4 == 0 && onSegment(q1, q2, p2)) return true;
+  return false;
+}
