@@ -192,7 +192,7 @@ bool haliullin::pointInPolygon(const Point& point, const Polygon& poly)
 
       if ((p1.y_ > point.y_) != (p2.y_ > point.y_))
       {
-        double intersectX = p1.x_ + (double)(point.y_ - p1.y_) * (p2.x_ - p1.x_) / (p2.y_ - p1.y_);
+        double intersectX = p1.x_ + static_cast< double >(point.y_ - p1.y_) * (p2.x_ - p1.x_) / (p2.y_ - p1.y_);
         if (point.x_ < intersectX)
         {
           return true;
