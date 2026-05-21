@@ -147,18 +147,15 @@ bool haliullin::polygonsIntersect(const Polygon& a, const Polygon& b)
     return false;
   }
 
-  std::vector<size_t> indicesA(nA);
+  std::vector< size_t > indicesA(nA);
   std::generate(indicesA.begin(), indicesA.end(), [i = 0]() mutable { return i++; });
-
-  return std::any_of(indicesA.begin(), indicesA.end(),
+  bool edgesIntersect = std::any_of(indicesA.begin(), indicesA.end(),
     [&](size_t i)
     {
       const Point& p1 = ptsA[i];
       const Point& p2 = ptsA[(i + 1) % nA];
-
       std::vector< size_t > indicesB(nB);
       std::generate(indicesB.begin(), indicesB.end(), [j = 0]() mutable { return j++; });
-
       return std::any_of(indicesB.begin(), indicesB.end(),
         [&](size_t j)
         {
@@ -167,6 +164,43 @@ bool haliullin::polygonsIntersect(const Polygon& a, const Polygon& b)
           return segmentsIntersect(p1, p2, q1, q2);
         });
     });
+  if (edgesIntersect)
+  {
+    return true;
+  }
+
+  return std::any_of(ptsA.begin(), ptsA.end(),
+            [&](const Point& p) { return pointInPolygon(p, b); })
+          || std::any_of(ptsB.begin(), ptsB.end(),
+              [&](const Point& p) { return pointInPolygon(p, a); });
+}
+
+bool haliullin::pointInPolygon(const Point& point, const Polygon& poly)
+{
+  const auto& pts = poly.points_;
+  size_t n = pts.size();
+  if (n < 3) return false;
+
+  std::vector<size_t> indices(n);
+  std::generate(indices.begin(), indices.end(), [i = 0]() mutable { return i++; });
+
+  size_t count = std::count_if(indices.begin(), indices.end(),
+    [&](size_t i)
+    {
+      const Point& p1 = pts[i];
+      const Point& p2 = pts[(i + 1) % n];
+
+      if ((p1.y_ > point.y_) != (p2.y_ > point.y_))
+      {
+        double intersectX = p1.x_ + (double)(point.y_ - p1.y_) * (p2.x_ - p1.x_) / (p2.y_ - p1.y_);
+        if (point.x_ < intersectX)
+        {
+          return true;
+        }
+      }
+      return false;
+    });
+  return (count % 2 == 1);
 }
 
 int haliullin::orientation(const Point& a, const Point& b, const Point& c)

@@ -244,6 +244,7 @@ void haliullin::intersections(std::istream& in, std::ostream& out, const data_t&
   if (!(in >> target) || target.points_.size() < 3)
   {
     out << "<INVALID COMMAND>\n";
+    in.clear();
     in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     return;
   }

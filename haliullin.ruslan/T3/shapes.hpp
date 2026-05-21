@@ -24,6 +24,7 @@ namespace haliullin
   double getArea(const Polygon& poly);
   bool hasRightAngle(const Polygon& poly);
   bool polygonsIntersect(const Polygon& a, const Polygon& b);
+  bool pointInPolygon(const Point& point, const Polygon& poly);
 
 
   using iit_t = std::istream_iterator< Point >;
