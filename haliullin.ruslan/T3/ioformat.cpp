@@ -17,7 +17,7 @@ std::istream& haliullin::operator>>(std::istream& in, DelimiterIO&& dest)
   return in;
 }
 
-haliullin::IOguard::IOguard(std::basic_ios<char>& s):
+haliullin::IOguard::IOguard(std::basic_ios< char >& s):
   s_(s),
   precision_(s.precision()),
   width_(s.width()),
