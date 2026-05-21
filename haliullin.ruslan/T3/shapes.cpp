@@ -81,3 +81,28 @@ std::ostream& haliullin::operator<<(std::ostream& out, const Polygon& src)
   }
   return out;
 }
+
+double haliullin::getArea(const Polygon& poly)
+{
+  const auto& pts = poly.points_;
+  if (pts.size() < 3)
+  {
+    return 0.0;
+  }
+
+  std::vector<double> triAreas(pts.size() - 2);
+  const Point& p0 = pts[0];
+
+  std::generate(triAreas.begin(), triAreas.end(),
+    [&pts, &p0, idx = 1]() mutable
+    {
+      const Point& p1 = pts[idx];
+      const Point& p2 = pts[idx + 1];
+      ++idx;
+      double area = (p1.x_ - p0.x_) * (p2.y_ - p0.y_) - (p2.x_ - p0.x_) * (p1.y_ - p0.y_);
+      return std::abs(area) / 2.0;
+    }
+  );
+
+  return std::accumulate(triAreas.begin(), triAreas.end(), 0.0);
+}
