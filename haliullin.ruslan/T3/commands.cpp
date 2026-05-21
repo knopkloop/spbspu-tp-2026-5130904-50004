@@ -215,6 +215,12 @@ void haliullin::count(std::istream& in, std::ostream& out, const data_t& polygon
   }
 }
 
+void haliullin::rightshapes(std::istream& in, std::ostream& out, const data_t& polygons)
+{
+  auto cnt = std::count_if(polygons.begin(), polygons.end(), hasRightAngle);
+  out << cnt << "\n";
+}
+
 void haliullin::intersections(std::istream& in, std::ostream& out, const data_t& polygons)
 {
   Polygon target;
