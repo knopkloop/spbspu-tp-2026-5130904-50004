@@ -64,3 +64,20 @@ std::istream& haliullin::operator>>(std::istream& in, Polygon& dest)
   }
   return in;
 }
+
+std::ostream& haliullin::operator<<(std::ostream& out, const Polygon& src)
+{
+  std::ostream::sentry sentry(out);
+  if (!sentry)
+  {
+    return out;
+  }
+  IOguard guard(out);
+  out << src.points_.size();
+  if (!src.points_.empty())
+  {
+    out << ' ' << src.points_.front();
+    std::copy(std::next(src.points_.begin()), src.points_.end(), oit_t(out, " "));
+  }
+  return out;
+}
