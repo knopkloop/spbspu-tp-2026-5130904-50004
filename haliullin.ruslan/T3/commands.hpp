@@ -9,7 +9,7 @@
 namespace haliullin
 {
   using data_t = std::vector< Polygon >;
-  using cf_t = std::function< void(std::istream&, std::ostream&, const data_t&) >;
+  using cf_t = std::function< void(std::istream&, std::ostream&) >;
 
   data_t readPolygonsFromFile(const std::string& filename);
 
