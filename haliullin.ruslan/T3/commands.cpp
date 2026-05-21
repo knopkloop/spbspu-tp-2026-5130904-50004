@@ -106,3 +106,38 @@ void haliullin::area(std::istream& in, std::ostream& out, const data_t& polygons
   }
 }
 
+void haliullin::max(std::istream& in, std::ostream& out, const data_t& polygons)
+{
+  std::string param;
+  if (!(in >> param))
+  {
+    out << "<INVALID COMMAND>\n";
+    in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    return;
+  }
+
+  if (polygons.empty())
+  {
+    out << "<INVALID COMMAND>\n";
+    in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    return;
+  }
+
+  if (param == "AREA")
+  {
+    auto it = std::max_element(polygons.begin(), polygons.end(),
+      [](const Polygon& a, const Polygon& b) { return getArea(a) < getArea(b); });
+    out << std::fixed << std::setprecision(1) << getArea(*it) << "\n";
+  }
+  else if (param == "VERTEXES")
+  {
+    auto it = std::max_element(polygons.begin(), polygons.end(),
+      [](const Polygon& a, const Polygon& b) { return a.points_.size() < b.points_.size(); });
+    out << it->points_.size() << "\n";
+  }
+  else
+  {
+    out << "<INVALID COMMAND>\n";
+    in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+  }
+}
