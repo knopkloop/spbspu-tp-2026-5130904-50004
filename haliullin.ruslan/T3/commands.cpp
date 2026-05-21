@@ -1,4 +1,5 @@
 #include "commands.hpp"
+#include "ioformat.hpp"
 #include <fstream>
 #include <sstream>
 #include <algorithm>
@@ -51,6 +52,7 @@ void haliullin::area(std::istream& in, std::ostream& out, const data_t& polygons
     return;
   }
 
+  IOguard guard(out);
   out << std::fixed << std::setprecision(1);
 
   if (param == "EVEN")
@@ -128,6 +130,7 @@ void haliullin::max(std::istream& in, std::ostream& out, const data_t& polygons)
   {
     auto it = std::max_element(polygons.begin(), polygons.end(),
       [](const Polygon& a, const Polygon& b) { return getArea(a) < getArea(b); });
+    IOguard guard(out);
     out << std::fixed << std::setprecision(1) << getArea(*it) << "\n";
   }
   else if (param == "VERTEXES")
@@ -164,6 +167,7 @@ void haliullin::min(std::istream& in, std::ostream& out, const data_t& polygons)
   {
     auto it = std::min_element(polygons.begin(), polygons.end(),
       [](const Polygon& a, const Polygon& b) { return getArea(a) < getArea(b); });
+    IOguard guard(out);
     out << std::fixed << std::setprecision(1) << getArea(*it) << "\n";
   }
   else if (param == "VERTEXES")
@@ -224,8 +228,7 @@ void haliullin::count(std::istream& in, std::ostream& out, const data_t& polygon
 
 void haliullin::rightshapes(std::istream& in, std::ostream& out, const data_t& polygons)
 {
-  std::string extra;
-  if (in >> extra)
+  if (in.peek() != '\n' && in.peek() != EOF)
   {
     out << "<INVALID COMMAND>\n";
     in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
@@ -244,11 +247,10 @@ void haliullin::intersections(std::istream& in, std::ostream& out, const data_t&
     in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     return;
   }
-  std::string extra;
-  if (in >> extra)
+  if (in.peek() != '\n' && in.peek() != EOF)
   {
     out << "<INVALID COMMAND>\n";
-    in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     return;
   }
   auto cnt = std::count_if(polygons.begin(), polygons.end(),
