@@ -1,9 +1,8 @@
 #ifndef SHAPES_HPP
 #define SHAPES_HPP
 
-#include <iosfwd>
+#include <sstream>
 #include <vector>
-#include <iterator>
 
 namespace haliullin
 {
@@ -25,10 +24,6 @@ namespace haliullin
   bool hasRightAngle(const Polygon& poly);
   bool polygonsIntersect(const Polygon& a, const Polygon& b);
   bool pointInPolygon(const Point& point, const Polygon& poly);
-
-
-  using iit_t = std::istream_iterator< Point >;
-  using oit_t = std::ostream_iterator< Point> ;
 
   int orientation(const Point& a, const Point& b, const Point& c);
   bool onSegment(const Point& a, const Point&b, const Point& c);

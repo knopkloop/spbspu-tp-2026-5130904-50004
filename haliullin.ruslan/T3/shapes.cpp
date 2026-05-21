@@ -1,6 +1,7 @@
 #include "shapes.hpp"
 #include "ioformat.hpp"
 #include <iostream>
+#include <iterator>
 #include <algorithm>
 #include <numeric>
 #include <cmath>
@@ -47,14 +48,7 @@ std::istream& haliullin::operator>>(std::istream& in, Polygon& dest)
   }
   std::vector< Point > temp;
   temp.reserve(count);
-  std::generate_n(std::back_inserter(temp), count,
-    [&in]()
-    {
-      Point p;
-      in >> p;
-      return p;
-    }
-  );
+  std::copy_n(std::istream_iterator< Point >(in), count, std::back_inserter(temp));
   if (in)
   {
     dest.points_ = std::move(temp);
@@ -78,7 +72,7 @@ std::ostream& haliullin::operator<<(std::ostream& out, const Polygon& src)
   if (!src.points_.empty())
   {
     out << ' ' << src.points_.front();
-    std::copy(std::next(src.points_.begin()), src.points_.end(), oit_t(out, " "));
+    std::copy(std::next(src.points_.begin()), src.points_.end(), std::ostream_iterator< Point >(out, " "));
   }
   return out;
 }
@@ -169,10 +163,8 @@ bool haliullin::polygonsIntersect(const Polygon& a, const Polygon& b)
     return true;
   }
 
-  return std::any_of(ptsA.begin(), ptsA.end(),
-            [&](const Point& p) { return pointInPolygon(p, b); })
-          || std::any_of(ptsB.begin(), ptsB.end(),
-              [&](const Point& p) { return pointInPolygon(p, a); });
+  return std::any_of(ptsA.begin(), ptsA.end(), [&](const Point& p) { return pointInPolygon(p, b); })
+          || std::any_of(ptsB.begin(), ptsB.end(), [&](const Point& p) { return pointInPolygon(p, a); });
 }
 
 bool haliullin::pointInPolygon(const Point& point, const Polygon& poly)
@@ -181,7 +173,7 @@ bool haliullin::pointInPolygon(const Point& point, const Polygon& poly)
   size_t n = pts.size();
   if (n < 3) return false;
 
-  std::vector<size_t> indices(n);
+  std::vector< size_t > indices(n);
   std::generate(indices.begin(), indices.end(), [i = 0]() mutable { return i++; });
 
   size_t count = std::count_if(indices.begin(), indices.end(),
