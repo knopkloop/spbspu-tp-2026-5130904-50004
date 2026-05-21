@@ -30,3 +30,37 @@ std::ostream& haliullin::operator<<(std::ostream& out, const Point& src)
   out << '(' << src.x_ << ';' << src.y_ << ')';
   return out;
 }
+
+std::istream& haliullin::operator>>(std::istream& in, Polygon& dest)
+{
+  std::istream::sentry sentry(in);
+  if (!sentry)
+  {
+    return in;
+  }
+  size_t count = 0;
+  in >> count;
+  if (!in)
+  {
+    in.setstate(std::ios_base::failbit);
+  }
+  std::vector< Point > temp;
+  temp.reserve(count);
+  std::generate_n(std::back_inserter(temp), count,
+    [&in]()
+    {
+      Point p;
+      in >> p;
+      return p;
+    }
+  );
+  if (in)
+  {
+    dest.points_ = std::move(temp);
+  }
+  else
+  {
+    in.setstate(std::ios_base::failbit);
+  }
+  return in;
+}

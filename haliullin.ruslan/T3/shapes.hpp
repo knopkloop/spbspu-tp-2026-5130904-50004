@@ -11,10 +11,20 @@ namespace haliullin
   {
     int x_, y_;
   };
-
   std::istream& operator>>(std::istream& in, Point& dest);
   std::ostream& operator<<(std::ostream& out, const Point& src);
 
+  struct Polygon
+  {
+    std::vector< Point > points_;
+  };
+  std::istream& operator>>(std::istream& in, Polygon& dest);
+  std::ostream& operator<<(std::ostream& out, const Polygon& src);
+
+  double getArea(const Polygon& poly);
+
+  using iit_t = std::istream_iterator<Point>;
+  using oit_t = std::ostream_iterator<Point>;
 }
 
 #endif
