@@ -106,7 +106,7 @@ void haliullin::area(std::istream& in, std::ostream& out, const data_t& polygons
     double sum = std::accumulate(polygons.begin(), polygons.end(), 0.0,
       [n](double s, const Polygon& p)
       {
-        return s + (static_cast< int >(p.points_.size()) == n ? getArea(p) : 0.0);
+        return s + (p.points_.size() == n ? getArea(p) : 0.0);
       });
     out << sum << "\n";
   }
@@ -211,24 +211,31 @@ void haliullin::count(std::istream& in, std::ostream& out, const data_t& polygon
     if (!std::all_of(param.begin(), param.end(), ::isdigit))
     {
       out << "<INVALID COMMAND>\n";
-      in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+      in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
       return;
     }
     size_t n = std::stoull(param);
     if (n == 0)
     {
       out << "<INVALID COMMAND>\n";
-      in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+      in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
       return;
     }
     auto cnt = std::count_if(polygons.begin(), polygons.end(),
-      [n](const Polygon& p) { return static_cast<int>(p.points_.size()) == n; });
+      [n](const Polygon& p) { return p.points_.size() == n; });
     out << cnt << "\n";
   }
 }
 
 void haliullin::rightshapes(std::istream& in, std::ostream& out, const data_t& polygons)
 {
+  std::string extra;
+  if (in >> extra)
+  {
+    out << "<INVALID COMMAND>\n";
+    in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    return;
+  }
   auto cnt = std::count_if(polygons.begin(), polygons.end(), hasRightAngle);
   out << cnt << "\n";
 }
