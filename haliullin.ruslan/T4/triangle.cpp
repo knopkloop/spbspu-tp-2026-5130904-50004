@@ -1,9 +1,9 @@
-#include "triangle.hpp"
+#include <algorithm>
 #include <cmath>
 #include <stdexcept>
-#include <algorithm>
+#include "triangle.hpp"
 
-haliullin::Triangle::Triangle(const point_t & p1, const point_t & p2, const point_t & p3):
+haliullin::Triangle::Triangle(const point_t& p1, const point_t& p2, const point_t& p3):
   p1_(p1),
   p2_(p2),
   p3_(p3),
@@ -45,7 +45,7 @@ haliullin::rectangle_t haliullin::Triangle::getFrameRect() const
   return rectangle_t(width, height, center);
 }
 
-void haliullin::Triangle::move(const point_t & pt)
+void haliullin::Triangle::move(const point_t& pt)
 {
   double dx = pt.x_ - pos_.x_;
   double dy = pt.y_ - pos_.y_;

@@ -1,17 +1,15 @@
+#include <iostream>
+#include <string>
+#include <vector>
 #include "shape.hpp"
 #include "rectangle.hpp"
 #include "triangle.hpp"
 #include "diamond.hpp"
 #include "functions.hpp"
 
-#include <string>
-#include <vector>
-#include <iostream>
-
-using namespace haliullin;
-
 int main()
 {
+  using namespace haliullin;
   std::vector< std::shared_ptr< Shape > > shapes;
   std::vector< std::string > names;
 
@@ -26,14 +24,14 @@ int main()
     shapes.push_back(std::make_shared< Diamond >(6.0, 4.0, point_t(5.0, 5.0)));
     names.push_back("Diamond");
   }
-  catch (const std::exception & e)
+  catch (const std::exception& e)
   {
     std::cerr << "Failed to create figures: " << e.what() << "\n";
     return 1;
   }
 
   std::vector< std::weak_ptr< Shape > > wshapes;
-  for (const auto & shape : shapes)
+  for (const auto& shape : shapes)
   {
     wshapes.push_back(shape);
   }
@@ -44,7 +42,7 @@ int main()
     displayAllFigures(wshapes, names);
     displayTotalFrame(getTotalFrame(wshapes));
   }
-  catch (const std::exception & e)
+  catch (const std::exception& e)
   {
     std::cerr << "Failed to display figures: " << e.what() << "\n";
     return 1;
@@ -86,7 +84,7 @@ int main()
   {
     scaleFigures(wshapes, point_t(x, y), k);
   }
-  catch (const std::exception & e)
+  catch (const std::exception& e)
   {
     std::cerr << "Failed to scale figures: " << e.what() << "\n";
     return 1;
@@ -98,7 +96,7 @@ int main()
     displayAllFigures(wshapes, names);
     displayTotalFrame(getTotalFrame(wshapes));
   }
-  catch (const std::exception & e)
+  catch (const std::exception& e)
   {
     std::cerr << "Failed to display figures: " << e.what() << "\n";
     return 1;
