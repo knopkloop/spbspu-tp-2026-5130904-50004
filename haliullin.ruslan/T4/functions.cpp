@@ -131,4 +131,3 @@ void haliullin::scaleFigures(std::vector< std::weak_ptr< Shape > >& figures, con
     shape->move(anchor.x_ - anchorAfter.x_, anchor.y_ - anchorAfter.y_);
   }
 }
-
