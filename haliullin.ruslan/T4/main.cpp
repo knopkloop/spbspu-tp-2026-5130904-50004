@@ -31,12 +31,12 @@ int main()
   }
 
   std::vector< std::weak_ptr< Shape > > wshapes;
-  for (const auto& shape : shapes)
+  for (const auto& shape: shapes)
   {
     wshapes.push_back(shape);
   }
 
-  std::cout << "BEFORE:" << "\n\n";
+  std::cout << "BEFORE:\n";
   try
   {
     displayAllFigures(wshapes, names);
@@ -47,7 +47,6 @@ int main()
     std::cerr << "Failed to display figures: " << e.what() << "\n";
     return 1;
   }
-  std::cout << "\n";
 
   double x, y, k;
   std::cout << "Enter scale point (x y): ";
@@ -60,26 +59,22 @@ int main()
     }
     else
     {
-      std::cerr << "Invalid point coordinates" << "\n";
+      std::cerr << "Invalid point coordinates\n";
       return 1;
     }
   }
-
   std::cout << "Enter scale coefficient: ";
   std::cin >> k;
   if (!std::cin)
   {
-    std::cerr << "Invalid coefficient" << "\n";
+    std::cerr << "Invalid coefficient\n";
     return 1;
   }
-
   if (k <= 0.0)
   {
-    std::cerr << "Scale coefficient must be positive" << "\n";
+    std::cerr << "Scale coefficient must be positive\n";
     return 1;
   }
-  std::cout << "\n";
-
   try
   {
     scaleFigures(wshapes, point_t(x, y), k);
@@ -90,7 +85,7 @@ int main()
     return 1;
   }
 
-  std::cout << "AFTER:" << "\n\n";
+  std::cout << "AFTER:\n";
   try
   {
     displayAllFigures(wshapes, names);
