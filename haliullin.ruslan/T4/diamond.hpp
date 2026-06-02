@@ -5,16 +5,16 @@
 
 namespace haliullin
 {
-  class Diamond : public Shape
+  class Diamond: public Shape
   {
   public:
-    Diamond(double d1, double d2, const point_t & pos);
+    Diamond(double d1, double d2, const point_t& pos);
     ~Diamond() override = default;
 
     double getArea() const override;
     rectangle_t getFrameRect() const override;
 
-    void move(const point_t & pt) override;
+    void move(const point_t& pt) override;
     void move(double dx, double dy) override;
 
     void scale(double k) override;
