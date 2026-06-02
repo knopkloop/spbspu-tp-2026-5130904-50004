@@ -10,9 +10,9 @@ namespace haliullin
 {
   using data_t = std::vector< Polygon >;
   using cf_t = std::function< void(std::istream&, std::ostream&) >;
+  void require(std::istream& in, bool condition);
 
   data_t readPolygonsFromFile(const std::string& filename);
-
   void area(std::istream& in, std::ostream& out, const data_t& polygons);
   void max(std::istream& in, std::ostream& out, const data_t& polygons);
   void min(std::istream& in, std::ostream& out, const data_t& polygons);

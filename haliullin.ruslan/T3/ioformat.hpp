@@ -9,7 +9,6 @@ namespace haliullin
   {
     char expected_;
   };
-
   std::istream& operator>>(std::istream& in, DelimiterIO&& dest);
 
   class IOguard

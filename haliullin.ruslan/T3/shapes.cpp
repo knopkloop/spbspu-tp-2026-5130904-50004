@@ -1,10 +1,10 @@
-#include "shapes.hpp"
-#include "ioformat.hpp"
 #include <iostream>
 #include <iterator>
 #include <algorithm>
 #include <numeric>
 #include <cmath>
+#include "shapes.hpp"
+#include "ioformat.hpp"
 
 std::istream& haliullin::operator>>(std::istream& in, Point& dest)
 {
@@ -112,7 +112,12 @@ bool haliullin::hasRightAngle(const Polygon& poly)
   }
 
   std::vector<size_t> indices(n);
-  std::generate(indices.begin(), indices.end(), [i = 0]() mutable { return i++; });
+  std::generate(indices.begin(), indices.end(),
+    [i = 0]() mutable
+    {
+      return i++;
+    }
+  );
 
   return std::any_of(indices.begin(), indices.end(),
     [&pts, n](size_t i)
@@ -127,7 +132,8 @@ bool haliullin::hasRightAngle(const Polygon& poly)
       int dx2 = c.x_ - b.x_;
       int dy2 = c.y_ - b.y_;
       return (dx1 * dx2 + dy1 * dy2) == 0;
-    });
+    }
+  );
 }
 
 bool haliullin::polygonsIntersect(const Polygon& a, const Polygon& b)
@@ -142,7 +148,12 @@ bool haliullin::polygonsIntersect(const Polygon& a, const Polygon& b)
   }
 
   std::vector< size_t > indicesA(nA);
-  std::generate(indicesA.begin(), indicesA.end(), [i = 0]() mutable { return i++; });
+  std::generate(indicesA.begin(), indicesA.end(),
+    [i = 0]() mutable
+    {
+      return i++;
+    }
+  );
   bool edgesIntersect = std::any_of(indicesA.begin(), indicesA.end(),
     [&](size_t i)
     {
@@ -156,25 +167,36 @@ bool haliullin::polygonsIntersect(const Polygon& a, const Polygon& b)
           const Point& q1 = ptsB[j];
           const Point& q2 = ptsB[(j + 1) % nB];
           return segmentsIntersect(p1, p2, q1, q2);
-        });
-    });
+        }
+      );
+    }
+  );
   if (edgesIntersect)
   {
     return true;
   }
 
-  return std::any_of(ptsA.begin(), ptsA.end(), [&](const Point& p) { return pointInPolygon(p, b); })
-          || std::any_of(ptsB.begin(), ptsB.end(), [&](const Point& p) { return pointInPolygon(p, a); });
+  bool aInB = std::any_of(ptsA.begin(), ptsA.end(), [&](const Point& p) { return pointInPolygon(p, b); });
+  bool bInA = std::any_of(ptsB.begin(), ptsB.end(), [&](const Point& p) { return pointInPolygon(p, a); });
+  return aInB || bInA;
 }
 
 bool haliullin::pointInPolygon(const Point& point, const Polygon& poly)
 {
   const auto& pts = poly.points_;
   size_t n = pts.size();
-  if (n < 3) return false;
+  if (n < 3)
+  {
+    return false;
+  }
 
   std::vector< size_t > indices(n);
-  std::generate(indices.begin(), indices.end(), [i = 0]() mutable { return i++; });
+  std::generate(indices.begin(), indices.end(),
+    [i = 0]() mutable
+    {
+      return i++;
+    }
+  );
 
   size_t count = std::count_if(indices.begin(), indices.end(),
     [&](size_t i)
@@ -191,21 +213,27 @@ bool haliullin::pointInPolygon(const Point& point, const Polygon& poly)
         }
       }
       return false;
-    });
-  return (count % 2 == 1);
+    }
+  );
+
+  return (count % 2);
 }
 
 int haliullin::orientation(const Point& a, const Point& b, const Point& c)
 {
   int val = (b.x_ - a.x_) * (c.y_ - a.y_) - (b.y_ - a.y_) * (c.x_ - a.x_);
-  if (val == 0) return 0;
+  if (val == 0)
+  {
+    return 0;
+  }
   return (val > 0) ? 1 : 2;
 }
 
 bool haliullin::onSegment(const Point& a, const Point& b, const Point& c)
 {
-  return (std::min(a.x_, b.x_) <= c.x_ && c.x_ <= std::max(a.x_, b.x_))
-      && (std::min(a.y_, b.y_) <= c.y_ && c.y_ <= std::max(a.y_, b.y_));
+  bool c1 = std::min(a.x_, b.x_) <= c.x_ && c.x_ <= std::max(a.x_, b.x_);
+  bool c2 = std::min(a.y_, b.y_) <= c.y_ && c.y_ <= std::max(a.y_, b.y_);
+  return c1 && c2;
 }
 
 bool haliullin::segmentsIntersect(const Point& p1, const Point& p2, const Point& q1, const Point& q2)
@@ -215,10 +243,11 @@ bool haliullin::segmentsIntersect(const Point& p1, const Point& p2, const Point&
   int o3 = orientation(q1, q2, p1);
   int o4 = orientation(q1, q2, p2);
 
-  if (o1 != o2 && o3 != o4) return true;
-  if (o1 == 0 && onSegment(p1, p2, q1)) return true;
-  if (o2 == 0 && onSegment(p1, p2, q2)) return true;
-  if (o3 == 0 && onSegment(q1, q2, p1)) return true;
-  if (o4 == 0 && onSegment(q1, q2, p2)) return true;
-  return false;
+  bool c1 = (o1 != o2) && (o3 != o4);
+  bool c2 = (o1 == 0) && onSegment(p1, p2, q1);
+  bool c3 = (o2 == 0) && onSegment(p1, p2, q2);
+  bool c4 = (o3 == 0) && onSegment(q1, q2, p1);
+  bool c5 = (o4 == 0) && onSegment(q1, q2, p2);
+
+  return c1 || c2 || c3 || c4 || c5;
 }
