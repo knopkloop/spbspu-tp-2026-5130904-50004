@@ -1,10 +1,10 @@
-#include "DataStruct.hpp"
 #include <iostream>
 #include <sstream>
 #include <iterator>
 #include <vector>
 #include <algorithm>
 #include <limits>
+#include "dataStruct.hpp"
 
 int main()
 {
