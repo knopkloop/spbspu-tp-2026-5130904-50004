@@ -1,8 +1,8 @@
-#include "diamond.hpp"
 #include <cmath>
 #include <stdexcept>
+#include "diamond.hpp"
 
-haliullin::Diamond::Diamond(double d1, double d2, const point_t & pos):
+haliullin::Diamond::Diamond(double d1, double d2, const point_t& pos):
   d1_(d1),
   d2_(d2),
   pos_(pos)
@@ -23,7 +23,7 @@ haliullin::rectangle_t haliullin::Diamond::getFrameRect() const
   return rectangle_t(d1_, d2_, pos_);
 }
 
-void haliullin::Diamond::move(const point_t & pt)
+void haliullin::Diamond::move(const point_t& pt)
 {
   pos_ = pt;
 }

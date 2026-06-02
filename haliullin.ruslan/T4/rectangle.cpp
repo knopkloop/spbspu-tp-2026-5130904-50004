@@ -1,7 +1,7 @@
-#include "rectangle.hpp"
 #include <stdexcept>
+#include "rectangle.hpp"
 
-haliullin::Rectangle::Rectangle(double width, double height, const point_t & pos):
+haliullin::Rectangle::Rectangle(double width, double height, const point_t& pos):
   width_(width),
   height_(height),
   pos_(pos)
@@ -22,7 +22,7 @@ haliullin::rectangle_t haliullin::Rectangle::getFrameRect() const
   return rectangle_t(width_, height_, pos_);
 }
 
-void haliullin::Rectangle::move(const point_t & pt)
+void haliullin::Rectangle::move(const point_t& pt)
 {
   pos_ = pt;
 }

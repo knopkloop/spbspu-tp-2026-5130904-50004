@@ -1,17 +1,17 @@
-#include "functions.hpp"
 #include <iostream>
 #include <iomanip>
 #include <limits>
 #include <cmath>
+#include "functions.hpp"
 
-haliullin::point_t haliullin::getRightBottomFrame(const rectangle_t & frame)
+haliullin::point_t haliullin::getRightBottomFrame(const rectangle_t& frame)
 {
   double halfWidth = frame.width_ / 2.0;
   double halfHeight = frame.height_ / 2.0;
   return point_t(frame.pos_.x_ + halfWidth, frame.pos_.y_ + halfHeight);
 }
 
-void haliullin::displayFigure(const std::weak_ptr< Shape > & figure, const std::string & name, size_t id)
+void haliullin::displayFigure(const std::weak_ptr< Shape >& figure, const std::string& name, size_t id)
 {
   auto shape = figure.lock();
   if (!shape)
@@ -27,7 +27,7 @@ void haliullin::displayFigure(const std::weak_ptr< Shape > & figure, const std::
   << frame.width_ << ", height = " << frame.height_ << "\n";
 }
 
-void haliullin::displayAllFigures(const std::vector< std::weak_ptr< Shape > > & figures, const std::vector< std::string > & names)
+void haliullin::displayAllFigures(const std::vector< std::weak_ptr< Shape > >& figures, const std::vector< std::string >& names)
 {
   double total = 0.0;
   std::cout << std::fixed << std::setprecision(2);
@@ -46,7 +46,7 @@ void haliullin::displayAllFigures(const std::vector< std::weak_ptr< Shape > > & 
   std::cout << "Total area = " << total << "\n";
 }
 
-haliullin::rectangle_t haliullin::getTotalFrame(const std::vector< std::weak_ptr< Shape > > & figures)
+haliullin::rectangle_t haliullin::getTotalFrame(const std::vector< std::weak_ptr< Shape > >& figures)
 {
   if (figures.empty())
   {
@@ -58,7 +58,7 @@ haliullin::rectangle_t haliullin::getTotalFrame(const std::vector< std::weak_ptr
   double maxX = std::numeric_limits< double >::lowest();
   double maxY = std::numeric_limits< double >::lowest();
 
-  for (const auto & wptr : figures)
+  for (const auto& wptr : figures)
   {
     auto shape = wptr.lock();
     if (!shape)
@@ -102,16 +102,16 @@ haliullin::rectangle_t haliullin::getTotalFrame(const std::vector< std::weak_ptr
   return rectangle_t(width, height, center);
 }
 
-void haliullin::displayTotalFrame(const rectangle_t & frame)
+void haliullin::displayTotalFrame(const rectangle_t& frame)
 {
   std::cout << std::fixed << std::setprecision(2);
   std::cout << "Total frame: (" << frame.pos_.x_ << ";" << frame.pos_.y_ << ") ";
   std::cout << "width = " << frame.width_ << ", height = " << frame.height_ << "\n";
 }
 
-void haliullin::scaleFigures(std::vector< std::weak_ptr< Shape > > & Figures, const point_t & scaleCenter, double coef)
+void haliullin::scaleFigures(std::vector< std::weak_ptr< Shape > >& figures, const point_t& scaleCenter, double coef)
 {
-  for (const auto & wptr : Figures)
+  for (const auto& wptr : figures)
   {
     auto shape = wptr.lock();
     if (!shape)

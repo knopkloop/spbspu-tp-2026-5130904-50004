@@ -9,8 +9,6 @@ namespace haliullin
     double x_ = 0.0;
     double y_ = 0.0;
 
-    point_t() = default;
-
     point_t(double x, double y):
       x_(x),
       y_(y)
@@ -24,9 +22,7 @@ namespace haliullin
     double height_ = 0.0;
     point_t pos_ = {0.0, 0.0};
 
-    rectangle_t() = default;
-
-    rectangle_t(double width, double height, const point_t & pos):
+    rectangle_t(double width, double height, const point_t& pos):
       width_(width),
       height_(height),
       pos_(pos)
