@@ -58,7 +58,7 @@ haliullin::rectangle_t haliullin::getTotalFrame(const std::vector< std::weak_ptr
   double maxX = std::numeric_limits< double >::lowest();
   double maxY = std::numeric_limits< double >::lowest();
 
-  for (const auto& wptr : figures)
+  for (const auto& wptr: figures)
   {
     auto shape = wptr.lock();
     if (!shape)
@@ -111,7 +111,7 @@ void haliullin::displayTotalFrame(const rectangle_t& frame)
 
 void haliullin::scaleFigures(std::vector< std::weak_ptr< Shape > >& figures, const point_t& scaleCenter, double coef)
 {
-  for (const auto& wptr : figures)
+  for (const auto& wptr: figures)
   {
     auto shape = wptr.lock();
     if (!shape)
