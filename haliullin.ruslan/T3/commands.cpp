@@ -1,3 +1,4 @@
+#include "commands.hpp"
 #include <iostream>
 #include <iomanip>
 #include <fstream>
@@ -6,7 +7,6 @@
 #include <limits>
 #include <functional>
 #include <stdexcept>
-#include "commands.hpp"
 #include "ioformat.hpp"
 
 void haliullin::require(std::istream& in, bool condition)

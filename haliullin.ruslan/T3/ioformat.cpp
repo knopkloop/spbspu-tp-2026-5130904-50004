@@ -1,5 +1,5 @@
-#include <iostream>
 #include "ioformat.hpp"
+#include <iostream>
 
 std::istream& haliullin::operator>>(std::istream& in, DelimiterIO&& dest)
 {

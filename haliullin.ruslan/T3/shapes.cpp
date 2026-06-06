@@ -1,9 +1,9 @@
+#include "shapes.hpp"
 #include <iostream>
 #include <iterator>
 #include <algorithm>
 #include <numeric>
 #include <cmath>
-#include "shapes.hpp"
 #include "ioformat.hpp"
 
 std::istream& haliullin::operator>>(std::istream& in, Point& dest)
