@@ -1,5 +1,5 @@
-#include <stdexcept>
 #include "rectangle.hpp"
+#include <stdexcept>
 
 haliullin::Rectangle::Rectangle(double width, double height, const point_t& pos):
   width_(width),
