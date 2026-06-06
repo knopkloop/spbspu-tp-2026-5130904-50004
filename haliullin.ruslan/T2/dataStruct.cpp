@@ -1,5 +1,5 @@
-#include <string>
 #include "dataStruct.hpp"
+#include <string>
 #include "subTypes.hpp"
 
 std::istream& haliullin::operator>>(std::istream& in, DataStruct& dest)

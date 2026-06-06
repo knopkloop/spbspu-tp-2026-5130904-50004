@@ -1,7 +1,7 @@
+#include "triangle.hpp"
 #include <algorithm>
 #include <cmath>
 #include <stdexcept>
-#include "triangle.hpp"
 
 haliullin::Triangle::Triangle(const point_t& p1, const point_t& p2, const point_t& p3):
   p1_(p1),

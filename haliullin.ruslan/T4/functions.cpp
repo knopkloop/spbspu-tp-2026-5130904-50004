@@ -1,8 +1,8 @@
+#include "functions.hpp"
 #include <iostream>
 #include <iomanip>
 #include <limits>
 #include <cmath>
-#include "functions.hpp"
 
 haliullin::point_t haliullin::getRightBottomFrame(const rectangle_t& frame)
 {
@@ -131,4 +131,3 @@ void haliullin::scaleFigures(std::vector< std::weak_ptr< Shape > >& figures, con
     shape->move(anchor.x_ - anchorAfter.x_, anchor.y_ - anchorAfter.y_);
   }
 }
-
