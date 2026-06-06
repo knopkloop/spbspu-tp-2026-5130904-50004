@@ -1,8 +1,8 @@
+#include "functions.hpp"
 #include <iostream>
 #include <iomanip>
 #include <limits>
 #include <cmath>
-#include "functions.hpp"
 
 haliullin::point_t haliullin::getRightBottomFrame(const rectangle_t& frame)
 {

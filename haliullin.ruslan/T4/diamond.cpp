@@ -1,6 +1,6 @@
+#include "diamond.hpp"
 #include <cmath>
 #include <stdexcept>
-#include "diamond.hpp"
 
 haliullin::Diamond::Diamond(double d1, double d2, const point_t& pos):
   d1_(d1),
